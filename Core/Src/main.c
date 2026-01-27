@@ -26,6 +26,7 @@
 #include "ds3231.h"
 #include "oled.h"
 #include "delay.h"
+#include "display.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -77,7 +78,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
- //Time.year = 26;Time.month = 1;Time.day = 26;Time.week = 1;Time.hour = 20; Time.min = 13;Time.sec = 0;
+ //Time.year = 26;Time.month = 1;Time.day = 27;Time.week = 2;Time.hour = 14; Time.min = 37;Time.sec = 50;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -98,22 +99,19 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   //DS3231_SetTime(&Time); // 设置时间 （只需运行一次，设置完成后可注释掉）
+  DS3231_SetAlarm1(20, 59, 30); // 设置闹钟时间
     while (1)
     {
-        DS3231_GetTime(&Time);                   // 获取时间
-        OLED_ShowNum(0, 1, 2000 + Time.year, 4); // 显示年
-        OLED_ShowString(0, 5, "-");              // 显示“-”符号
-        OLED_ShowNum(0, 6, Time.month, 2);       // 显示月
-        OLED_ShowString(0, 8, "-");              // 显示“-”符号
-        OLED_ShowNum(0, 9, Time.day, 2);         // 显示日
-        OLED_ShowString(0, 11, "-");             // 显示“-”符号
-        OLED_ShowNum(0, 13, Time.week, 1);       // 显示星期
-        OLED_ShowNum(1, 1, Time.hour, 2);        // 显示时
-        OLED_ShowString(1, 3, ":");              // 显示冒号
-        OLED_ShowNum(1, 4, Time.min, 2);         // 显示分
-        OLED_ShowString(1, 6, ":");              // 显示冒号
-        OLED_ShowNum(1, 7, Time.sec, 2);         // 显示秒
-        HAL_Delay(100);
+      Display_ShowTime(&Time);
+      if(HAL_GPIO_ReadPin(KEY0_GPIO_Port,KEY0_Pin)==GPIO_PIN_RESET) // 按键检测
+      {
+        HAL_Delay(500);// 消抖
+        if(HAL_GPIO_ReadPin(KEY0_GPIO_Port,KEY0_Pin)==GPIO_PIN_RESET)
+        {
+          DS3231_DisableAlarm1(); // 禁用闹钟
+          HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_SET); // 熄灭LED表示闹钟禁用
+        }
+      }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

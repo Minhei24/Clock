@@ -17,6 +17,15 @@
 #define DS3231_MONTH   0x05  // 月寄存器
 #define DS3231_YEAR    0x06  // 年寄存器
 
+//DS3231闹钟寄存器定义
+#define ALARM1_SEC     0x07  // Alarm1秒寄存器
+#define ALARM1_MIN     0x08  // Alarm1分寄存器
+#define ALARM1_HOUR    0x09  // Alarm1时寄存器
+#define ALARM1_DAY     0x0A  // Alarm1日寄存器
+#define ALARM2_MIN     0x0B  // Alarm2分寄存器
+#define CONTROL_REG    0x0E  // 控制寄存器
+#define STATUS_REG     0x0F  // 状态寄存器
+
 // 时间结构体
 typedef struct {
     uint8_t year;   // 年（0-99，对应2000-2099）
@@ -37,7 +46,12 @@ uint8_t DEC2BCD(uint8_t dec);
 HAL_StatusTypeDef DS3231_SetTime(DS3231_TimeTypeDef *time);
 // 读取DS3231时间
 HAL_StatusTypeDef DS3231_GetTime(DS3231_TimeTypeDef *time);
-
+// 设置DS3231Alarm1（每天在指定时间触发）
+void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec);
+// 禁用DS3231Alarm1
+void DS3231_DisableAlarm1(void);
+// 仅关闭本次Alarm1（下次仍会触发）
+void DS3231_ClearAlarm1Once(void);
 
 
 #endif // __DS3231_H__

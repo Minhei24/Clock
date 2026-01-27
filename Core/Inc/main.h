@@ -57,6 +57,15 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Alarm_NVIC_Pin GPIO_PIN_7
+#define Alarm_NVIC_GPIO_Port GPIOA
+#define Alarm_NVIC_EXTI_IRQn EXTI9_5_IRQn
+#define KEY0_Pin GPIO_PIN_12
+#define KEY0_GPIO_Port GPIOB
+#define KEY1_Pin GPIO_PIN_13
+#define KEY1_GPIO_Port GPIOB
+#define KEY2_Pin GPIO_PIN_14
+#define KEY2_GPIO_Port GPIOB
 #define LED0_Pin GPIO_PIN_8
 #define LED0_GPIO_Port GPIOA
 #define OLED_SCL_Pin GPIO_PIN_6
