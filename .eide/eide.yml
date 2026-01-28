@@ -32,6 +32,7 @@ targets:
         - Hardware/OLED
         - Hardware/delay
         - Hardware/display
+        - Drivers/U8g2
       libList: []
     excludeList: []
     toolchain: GCC

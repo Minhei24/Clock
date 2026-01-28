@@ -43,7 +43,7 @@ uint8_t BCD2DEC(uint8_t bcd);
 // 十进制转BCD码
 uint8_t DEC2BCD(uint8_t dec);
 // 设置DS3231时间
-HAL_StatusTypeDef DS3231_SetTime(DS3231_TimeTypeDef *time);
+HAL_StatusTypeDef DS3231_SetTime(uint8_t year, uint8_t month, uint8_t day, uint8_t week, uint8_t hour, uint8_t min, uint8_t sec);
 // 读取DS3231时间
 HAL_StatusTypeDef DS3231_GetTime(DS3231_TimeTypeDef *time);
 // 设置DS3231Alarm1（每天在指定时间触发）
@@ -51,7 +51,7 @@ void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec);
 // 禁用DS3231Alarm1
 void DS3231_DisableAlarm1(void);
 // 仅关闭本次Alarm1（下次仍会触发）
-void DS3231_ClearAlarm1Once(void);
+void DS3231_CloseAlarm(void);
 
 
 #endif // __DS3231_H__

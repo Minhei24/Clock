@@ -13,17 +13,17 @@ uint8_t DEC2BCD(uint8_t dec)
 }
 
 // 设置DS3231时间
-HAL_StatusTypeDef DS3231_SetTime(DS3231_TimeTypeDef *time) 
+HAL_StatusTypeDef DS3231_SetTime(uint8_t year, uint8_t month, uint8_t day, uint8_t week, uint8_t hour, uint8_t min, uint8_t sec) 
 {
     uint8_t buf[7];
     // 按寄存器顺序填充：秒、分、时、星期、日、月、年
-    buf[0] = DEC2BCD(time->sec);
-    buf[1] = DEC2BCD(time->min);
-    buf[2] = DEC2BCD(time->hour);
-    buf[3] = DEC2BCD(time->week);
-    buf[4] = DEC2BCD(time->day);
-    buf[5] = DEC2BCD(time->month);
-    buf[6] = DEC2BCD(time->year);
+    buf[0] = DEC2BCD(sec);
+    buf[1] = DEC2BCD(min);
+    buf[2] = DEC2BCD(hour);
+    buf[3] = DEC2BCD(week);
+    buf[4] = DEC2BCD(day);
+    buf[5] = DEC2BCD(month);
+    buf[6] = DEC2BCD(year);
     
     // 从秒寄存器开始，连续写入7个字节
     return HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, DS3231_SEC, I2C_MEMADD_SIZE_8BIT, buf, 7, 500);
@@ -84,33 +84,41 @@ void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec) {
 // 禁用DS3231Alarm1
 void DS3231_DisableAlarm1(void) 
 {
-    uint8_t reg_val;
+    uint8_t reg;
 
     // 读取当前控制寄存器值，仅禁用Alarm1中断使能（bit0）
-    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, CONTROL_REG, I2C_MEMADD_SIZE_8BIT, &reg_val, 1, 500);
-    reg_val &= ~0x01;  // 只把bit0(A1IE)置0，其他位保持不变
-    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, CONTROL_REG, I2C_MEMADD_SIZE_8BIT, &reg_val, 1, 500);
+    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, CONTROL_REG,
+                           I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
+    reg &= ~0x01;  // 只把bit0(A1IE)置0，其他位保持不变
+    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, CONTROL_REG, 
+                           I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
 
     // 清除Alarm1的触发标志（bit0）
-    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, STATUS_REG, I2C_MEMADD_SIZE_8BIT, &reg_val, 1, 500);
-    reg_val &= ~0x01;  // 只清空A1F位，保留其他状态
-    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, STATUS_REG, I2C_MEMADD_SIZE_8BIT, &reg_val, 1, 500);
+    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, STATUS_REG,
+                           I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
+    reg &= ~0x01;  // 只清空A1F位，保留其他状态
+    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, STATUS_REG,
+                           I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
 
 }
 
 // 仅关闭本次Alarm1（下次仍会触发）
-void DS3231_ClearAlarm1Once(void) 
+void DS3231_CloseAlarm(void) 
 {
-    uint8_t status_val;
+    uint8_t status;
 
     // 读取状态寄存器
-    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, STATUS_REG, I2C_MEMADD_SIZE_8BIT, &status_val, 1, 500);
+    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, STATUS_REG,
+                            I2C_MEMADD_SIZE_8BIT, &status, 1, 500);
     
     // 仅清除Alarm1触发标志（A1F，bit0），其他位保持不变
-    status_val &= ~0x01;
+    status &= ~(1 << 0); // 清 A1F (bit0) 为 0
 
     // 写回状态寄存器，关闭本次中断
-    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, STATUS_REG, I2C_MEMADD_SIZE_8BIT, &status_val, 1, 500);
+    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, STATUS_REG,
+                            I2C_MEMADD_SIZE_8BIT, &status, 1, 500);
+    
+    HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_SET); // 熄灭LED表示闹钟关闭
 
 }
 
