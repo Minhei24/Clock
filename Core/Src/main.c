@@ -19,15 +19,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ds3231.h"
-#include "oled.h"
 #include "delay.h"
 #include "display.h"
 #include "u8g2.h"
+#include "buzzer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,20 +96,29 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C2_Init();
   MX_I2C1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   Display_init(&u8g2);
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2); // 启动定时器2通道2的PWM输出，用于蜂鸣器
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   //DS3231_SetTime(26,1,28,3,20,52,00); // 设置时间 （只需运行一次，设置完成后可注释掉）
-  //DS3231_SetAlarm1(20,59, 30); // 设置闹钟时间
+  DS3231_SetAlarm1(11,21, 00); // 设置闹钟时间
   
    
     while (1)
     {
       Display_ShowTime(&u8g2,&Time,&Alarm1);
-      HAL_Delay(1000);
+      if(Buzzer_Play)
+      {
+          Buzzer_Play_Star(); // 播放乐曲
+      }
+      else
+      {
+          Buzzer_Set_Pitch(0); // 关闭蜂鸣器
+      }
       //Display_ShowTime(&Time);
       /*if(HAL_GPIO_ReadPin(KEY0_GPIO_Port,KEY0_Pin)==GPIO_PIN_RESET) // 按键检测
       {

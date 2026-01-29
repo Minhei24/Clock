@@ -1,7 +1,7 @@
 #ifndef __DS3231_H__
 #define __DS3231_H__
 
-
+#include "buzzer.h"
 #include "i2c.h"
 #include "main.h"
 
@@ -45,6 +45,8 @@ typedef struct {
     uint8_t asec;  // Alarm1秒钟
 } DS3231_AlarmTypeDef;
 
+// 蜂鸣器播放状态变量
+static uint8_t Buzzer_Play = 0;
 
 // 函数声明
 // BCD码转十进制

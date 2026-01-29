@@ -26,7 +26,7 @@ void Display_init(u8g2_t *u8g2)
     u8g2_InitDisplay(u8g2);     // send init sequence to the display, display is in sleep mode after this,
     u8g2_SetPowerSave(u8g2, 0); // wake up display
     u8g2_ClearDisplay(u8g2);
-    //u8g2_SetFont(u8g2, u8g2_font_wqy16_t_chinese1);
+    
 
 }
 
@@ -38,8 +38,41 @@ void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time,DS3231_AlarmTypeDef 
     u8g2_DrawXBMP(u8g2,56,0,20,32,signal[0]); // 显示冒号
     u8g2_DrawXBMP(u8g2,76,0,28,32,num[time->min/10]); 
     u8g2_DrawXBMP(u8g2,104,0,28,32,num[time->min%10]); // 显示小时
-    //Display_Date(u8g2,time);
-    Display_Alarm(u8g2,alarm);
+    if (HAL_GPIO_ReadPin(KEY_Left_GPIO_Port,KEY_Left_Pin) == GPIO_PIN_RESET || HAL_GPIO_ReadPin(KEY_Right_GPIO_Port,KEY_Right_Pin) == GPIO_PIN_RESET)
+    {
+        delay_ms(50);//消抖
+        if (HAL_GPIO_ReadPin(KEY_Left_GPIO_Port,KEY_Left_Pin) == GPIO_PIN_RESET)
+        {
+            menu_state--;
+            if(menu_state < 1)
+            {
+                menu_state = 2;
+            }
+            while(HAL_GPIO_ReadPin(KEY_Left_GPIO_Port,KEY_Left_Pin) == GPIO_PIN_RESET);
+        }
+        else if (HAL_GPIO_ReadPin(KEY_Right_GPIO_Port,KEY_Right_Pin) == GPIO_PIN_RESET)
+        {
+            menu_state++;
+            if(menu_state > 2)
+            {
+                menu_state = 1;
+            }
+            while(HAL_GPIO_ReadPin(KEY_Right_GPIO_Port,KEY_Right_Pin) == GPIO_PIN_RESET);
+        }
+    }
+    switch (menu_state)
+    {
+    case 1:
+        
+        Display_Date(u8g2,time);
+        break;
+    case 2:
+        
+        Display_Alarm(u8g2,alarm);
+        break;
+    default:
+        break;
+    }
     u8g2_SendBuffer(u8g2);
 }
 
@@ -65,6 +98,12 @@ void Display_Alarm(u8g2_t *u8g2,DS3231_AlarmTypeDef *alarm)//绘制闹钟模块
     u8g2_DrawXBMP(u8g2,36,32,16,16,date[alarm->ahour/10]); 
     u8g2_DrawXBMP(u8g2,54,32,16,16,date[alarm->ahour%10]);
     u8g2_DrawXBMP(u8g2,72,32,16,16,date[13]); // 显示冒号
-    u8g2_DrawXBMP(u8g2,92,32,16,16,date[alarm->amin/10]); 
-    u8g2_DrawXBMP(u8g2,108,32,16,16,date[alarm->amin%10]); 
+    u8g2_DrawXBMP(u8g2,94,32,16,16,date[alarm->amin/10]); 
+    u8g2_DrawXBMP(u8g2,112,32,16,16,date[alarm->amin%10]);
+    u8g2_DrawXBMP(u8g2,32,48,16,16,date[14]); // 显示闹钟文字
+    u8g2_DrawXBMP(u8g2,48,48,16,16,date[15]);   
+    u8g2_DrawXBMP(u8g2,64,48,16,16,date[14]);
+    u8g2_DrawXBMP(u8g2,80,48,16,16,date[16]);
+    u8g2_DrawXBMP(u8g2,96,48,16,16,date[17]);
+    u8g2_DrawXBMP(u8g2,112,48,16,16,date[18]);
 }

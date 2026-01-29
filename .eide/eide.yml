@@ -29,10 +29,11 @@ targets:
         - Drivers/CMSIS/Device/ST/STM32F1xx/Include
         - Drivers/CMSIS/Include
         - Hardware/DS3231
-        - Hardware/OLED
         - Hardware/delay
         - Hardware/display
         - Drivers/U8g2
+        - Hardware/buzzer
+        - Hardware/Breathe
       libList: []
     excludeList: []
     toolchain: GCC

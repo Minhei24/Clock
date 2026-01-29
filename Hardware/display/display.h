@@ -4,7 +4,7 @@
 #include "i2c.h"
 #include "ds3231.h"
 
-static uint8_t menu_state=0;//菜单状态变量
+static uint8_t menu_state = 1;//菜单状态变量
 extern uint8_t num[][28*32];
 extern uint8_t signal [][20*32];
 extern uint8_t icon[][32*32];

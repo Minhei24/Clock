@@ -1,5 +1,7 @@
 #include "ds3231.h"
-#include "oled.h"
+
+
+
 // BCD码转十进制
 uint8_t BCD2DEC(uint8_t bcd)
 {
@@ -123,7 +125,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if (GPIO_Pin == Alarm_NVIC_Pin)
     {
-        HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_RESET); // 点亮LED表示闹钟触发
+        Buzzer_Play = !Buzzer_Play; // 切换蜂鸣器状态
     }
 }
 
