@@ -33,6 +33,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 DS3231_TimeTypeDef Time;//DS3231时间结构体实例
+DS3231_AlarmTypeDef Alarm1; // DS3231闹钟结构体实例
 u8g2_t u8g2;//U8g2结构体实例
 /* USER CODE END PTD */
 
@@ -100,13 +101,13 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //DS3231_SetTime(26,1,28,3,19,03,00); // 设置时间 （只需运行一次，设置完成后可注释掉）
-  //DS3231_SetAlarm1(9,12, 00); // 设置闹钟时间
+  //DS3231_SetTime(26,1,28,3,20,52,00); // 设置时间 （只需运行一次，设置完成后可注释掉）
+  //DS3231_SetAlarm1(20,59, 30); // 设置闹钟时间
   
    
     while (1)
     {
-      Display_ShowTime(&u8g2,&Time);
+      Display_ShowTime(&u8g2,&Time,&Alarm1);
       HAL_Delay(1000);
       //Display_ShowTime(&Time);
       /*if(HAL_GPIO_ReadPin(KEY0_GPIO_Port,KEY0_Pin)==GPIO_PIN_RESET) // 按键检测

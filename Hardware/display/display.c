@@ -30,13 +30,21 @@ void Display_init(u8g2_t *u8g2)
 
 }
 
-void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time)
+void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time,DS3231_AlarmTypeDef *alarm)//时间模块显示
 {   DS3231_GetTime(time); // 获取时间
-    u8g2_DrawXBMP(u8g2,0,0,28,32,num[time->hour/10]); // 显示数字
-    u8g2_DrawXBMP(u8g2,28,0,28,32,num[time->hour%10]); // 显示数字
+    DS3231_ReadAlarm1Time(alarm); // 获取闹钟时间
+    u8g2_DrawXBMP(u8g2,0,0,28,32,num[time->hour/10]); 
+    u8g2_DrawXBMP(u8g2,28,0,28,32,num[time->hour%10]); // 显示小时
     u8g2_DrawXBMP(u8g2,56,0,20,32,signal[0]); // 显示冒号
-    u8g2_DrawXBMP(u8g2,76,0,28,32,num[time->min/10]); // 显示数字
-    u8g2_DrawXBMP(u8g2,104,0,28,32,num[time->min%10]); // 显示数字
+    u8g2_DrawXBMP(u8g2,76,0,28,32,num[time->min/10]); 
+    u8g2_DrawXBMP(u8g2,104,0,28,32,num[time->min%10]); // 显示小时
+    //Display_Date(u8g2,time);
+    Display_Alarm(u8g2,alarm);
+    u8g2_SendBuffer(u8g2);
+}
+
+void Display_Date(u8g2_t *u8g2,DS3231_TimeTypeDef *time)//绘制日期模块
+{
     u8g2_DrawXBMP(u8g2,0,32,32,32,icon[0]); // 显示日历图标
     u8g2_DrawXBMP(u8g2,36,32,16,16,date[2]); 
     u8g2_DrawXBMP(u8g2,54,32,16,16,date[0]);
@@ -49,5 +57,14 @@ void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time)
     u8g2_DrawXBMP(u8g2,80,48,16,16,date[time->day/10]); 
     u8g2_DrawXBMP(u8g2,96,48,16,16,date[time->day%10]); 
     u8g2_DrawXBMP(u8g2,112,48,16,16,date[12]); // 显示日期
-    u8g2_SendBuffer(u8g2);
+}
+
+void Display_Alarm(u8g2_t *u8g2,DS3231_AlarmTypeDef *alarm)//绘制闹钟模块
+{
+    u8g2_DrawXBMP(u8g2,0,32,32,32,icon[1]); // 显示闹钟图标
+    u8g2_DrawXBMP(u8g2,36,32,16,16,date[alarm->ahour/10]); 
+    u8g2_DrawXBMP(u8g2,54,32,16,16,date[alarm->ahour%10]);
+    u8g2_DrawXBMP(u8g2,72,32,16,16,date[13]); // 显示冒号
+    u8g2_DrawXBMP(u8g2,92,32,16,16,date[alarm->amin/10]); 
+    u8g2_DrawXBMP(u8g2,108,32,16,16,date[alarm->amin%10]); 
 }
