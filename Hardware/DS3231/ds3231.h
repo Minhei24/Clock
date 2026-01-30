@@ -1,7 +1,6 @@
 #ifndef __DS3231_H__
 #define __DS3231_H__
 
-#include "buzzer.h"
 #include "i2c.h"
 #include "main.h"
 
@@ -46,7 +45,8 @@ typedef struct {
 } DS3231_AlarmTypeDef;
 
 // 蜂鸣器播放状态变量
-static uint8_t Buzzer_Play = 0;
+extern uint8_t Buzzer_Play;
+extern uint8_t alarm_signal; // 闹钟信号标志变量
 
 // 函数声明
 // BCD码转十进制
@@ -62,9 +62,15 @@ void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec);
 // 禁用DS3231Alarm1
 void DS3231_DisableAlarm1(void);
 // 仅关闭本次Alarm1（下次仍会触发）
-void DS3231_CloseAlarm(void);
+void DS3231_CloseAlarm1(void);
+// 仅关闭本次Alarm2（下次仍会触发）
+void DS3231_CloseAlarm2(void);
 //读取Alarm1时间
 void DS3231_ReadAlarm1Time(DS3231_AlarmTypeDef *alarm);
+// 设置DS3231Alarm2（整点报时功能）
+void DS3231_SetAlarm2(uint8_t min);
+//闹钟检测函数
+uint8_t DS3231_CheckAlarms(void);
 
 
 #endif // __DS3231_H__

@@ -1,5 +1,9 @@
 #include "display.h"
 #include "delay.h"
+
+uint8_t menu_state = 1;//菜单状态变量，默认显示日期模块
+
+
 uint8_t u8g2_gpio_and_delay_stm32(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED uint8_t msg, U8X8_UNUSED uint8_t arg_int, U8X8_UNUSED void *arg_ptr)
 {
     switch (msg)
@@ -63,11 +67,9 @@ void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time,DS3231_AlarmTypeDef 
     switch (menu_state)
     {
     case 1:
-        
         Display_Date(u8g2,time);
         break;
     case 2:
-        
         Display_Alarm(u8g2,alarm);
         break;
     default:

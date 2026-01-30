@@ -33,7 +33,7 @@ targets:
         - Hardware/display
         - Drivers/U8g2
         - Hardware/buzzer
-        - Hardware/Breathe
+        - Hardware/LED
       libList: []
     excludeList: []
     toolchain: GCC
