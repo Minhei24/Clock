@@ -1,8 +1,13 @@
 #ifndef __DISPLAY_H__
 #define __DISPLAY_H__
+
 #include "u8g2.h"
 #include "i2c.h"
 #include "ds3231.h"
+
+#define MENU_DATE 1
+#define MENU_ALARM 2
+#define MENU_SEC 3
 
 extern uint8_t menu_state;//菜单状态变量
 extern uint8_t num[][28*32];

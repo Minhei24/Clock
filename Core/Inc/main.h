@@ -66,6 +66,8 @@ void Error_Handler(void);
 #define Alarm_NVIC_Pin GPIO_PIN_7
 #define Alarm_NVIC_GPIO_Port GPIOA
 #define Alarm_NVIC_EXTI_IRQn EXTI9_5_IRQn
+#define KEY_Delay_Pin GPIO_PIN_12
+#define KEY_Delay_GPIO_Port GPIOB
 #define KEY_Left_Pin GPIO_PIN_13
 #define KEY_Left_GPIO_Port GPIOB
 #define KEY_Mid_Pin GPIO_PIN_15

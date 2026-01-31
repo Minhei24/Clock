@@ -42,34 +42,12 @@ void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time,DS3231_AlarmTypeDef 
     u8g2_DrawXBMP(u8g2,56,0,20,32,signal[0]); // 显示冒号
     u8g2_DrawXBMP(u8g2,76,0,28,32,num[time->min/10]); 
     u8g2_DrawXBMP(u8g2,104,0,28,32,num[time->min%10]); // 显示小时
-    if (HAL_GPIO_ReadPin(KEY_Left_GPIO_Port,KEY_Left_Pin) == GPIO_PIN_RESET || HAL_GPIO_ReadPin(KEY_Right_GPIO_Port,KEY_Right_Pin) == GPIO_PIN_RESET)
-    {
-        delay_ms(50);//消抖
-        if (HAL_GPIO_ReadPin(KEY_Left_GPIO_Port,KEY_Left_Pin) == GPIO_PIN_RESET)
-        {
-            menu_state--;
-            if(menu_state < 1)
-            {
-                menu_state = 2;
-            }
-            while(HAL_GPIO_ReadPin(KEY_Left_GPIO_Port,KEY_Left_Pin) == GPIO_PIN_RESET);
-        }
-        else if (HAL_GPIO_ReadPin(KEY_Right_GPIO_Port,KEY_Right_Pin) == GPIO_PIN_RESET)
-        {
-            menu_state++;
-            if(menu_state > 2)
-            {
-                menu_state = 1;
-            }
-            while(HAL_GPIO_ReadPin(KEY_Right_GPIO_Port,KEY_Right_Pin) == GPIO_PIN_RESET);
-        }
-    }
     switch (menu_state)
     {
-    case 1:
+    case MENU_DATE:
         Display_Date(u8g2,time);
         break;
-    case 2:
+    case MENU_ALARM:
         Display_Alarm(u8g2,alarm);
         break;
     default:

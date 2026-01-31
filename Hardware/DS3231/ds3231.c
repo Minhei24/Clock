@@ -84,21 +84,8 @@ void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec)
 // 禁用DS3231Alarm1
 void DS3231_DisableAlarm1(void)
 {
-    uint8_t reg;
-
-    // 读取当前控制寄存器值，仅禁用Alarm1中断使能（bit0）
-    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, CONTROL_REG,
-                     I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
-    reg &= ~0x01; // 只把bit0(A1IE)置0，其他位保持不变
-    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, CONTROL_REG,
-                      I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
-
-    // 清除Alarm1的触发标志（bit0）
-    HAL_I2C_Mem_Read(&hi2c2, DS3231_ADDR, STATUS_REG,
-                     I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
-    reg &= ~0x01; // 只清空A1F位，保留其他状态
-    HAL_I2C_Mem_Write(&hi2c2, DS3231_ADDR, STATUS_REG,
-                      I2C_MEMADD_SIZE_8BIT, &reg, 1, 500);
+   DS3231_CloseAlarm1();
+   DS3231_CloseAlarm2();
 }
 
 // 仅关闭本次Alarm1（下次仍会触发）
@@ -118,6 +105,8 @@ void DS3231_CloseAlarm1(void)
                       I2C_MEMADD_SIZE_8BIT, &status, 1, 500);
     
 }
+
+// 仅关闭本次Alarm2（下次仍会触发）
 void DS3231_CloseAlarm2(void)
 {
     uint8_t status;
@@ -144,6 +133,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
 }
 
+//获取闹钟参数
 void DS3231_ReadAlarm1Time(DS3231_AlarmTypeDef *alarm)
 {
     uint8_t buf[3];
@@ -161,6 +151,7 @@ void DS3231_ReadAlarm1Time(DS3231_AlarmTypeDef *alarm)
     alarm->Alarm1Flag = (status & 0x01); // 获取Alarm1标志位
 
 }
+
 // 设置DS3231Alarm2（整点报时功能）
 void DS3231_SetAlarm2(uint8_t min)
 {

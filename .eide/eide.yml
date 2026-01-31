@@ -34,6 +34,8 @@ targets:
         - Drivers/U8g2
         - Hardware/buzzer
         - Hardware/LED
+        - Hardware/key
+        - Hardware/alarm
       libList: []
     excludeList: []
     toolchain: GCC
