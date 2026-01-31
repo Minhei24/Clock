@@ -81,13 +81,6 @@ void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec)
                       I2C_MEMADD_SIZE_8BIT, &ctrl, 1, 500);
 }
 
-// 禁用DS3231Alarm1
-void DS3231_DisableAlarm1(void)
-{
-   DS3231_CloseAlarm1();
-   DS3231_CloseAlarm2();
-}
-
 // 仅关闭本次Alarm1（下次仍会触发）
 void DS3231_CloseAlarm1(void)
 {

@@ -103,9 +103,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    DS3231_SetTime(26, 1, 29, 4, 15, 59, 55); // 设置时间 （只需运行一次，设置完成后可注释掉）
-    DS3231_SetAlarm1(16, 00, 15);             // 设置闹钟时间
-    DS3231_SetAlarm2(0);                      // 设置整点报时
+    //DS3231_SetTime(26, 1, 31, 7, 15, 50, 00); // 设置时间 （只需运行一次，设置完成后可注释掉）
+    //DS3231_SetAlarm1(16, 05, 00);             // 设置闹钟时间
+    //DS3231_SetAlarm2(0);                      // 设置整点报时
     
     while (1)
     {   Key_Scan(&Alarm1);

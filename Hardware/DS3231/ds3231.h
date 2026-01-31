@@ -48,7 +48,6 @@ typedef struct {
 extern uint8_t Buzzer_Play;
 extern uint8_t alarm_signal; // 闹钟信号标志变量
 
-// 函数声明
 // BCD码转十进制
 uint8_t BCD2DEC(uint8_t bcd);
 // 十进制转BCD码
@@ -59,16 +58,14 @@ void DS3231_SetTime(uint8_t year, uint8_t month, uint8_t day, uint8_t week, uint
 void DS3231_GetTime(DS3231_TimeTypeDef *time);
 // 设置DS3231Alarm1（每天在指定时间触发）
 void DS3231_SetAlarm1(uint8_t hour, uint8_t min, uint8_t sec);
-// 禁用DS3231Alarm1
-void DS3231_DisableAlarm1(void);
-// 仅关闭本次Alarm1（下次仍会触发）
+// 设置DS3231Alarm2（整点报时功能）
+void DS3231_SetAlarm2(uint8_t min);
+// 关闭Alarm1
 void DS3231_CloseAlarm1(void);
-// 仅关闭本次Alarm2（下次仍会触发）
+// 关闭Alarm2
 void DS3231_CloseAlarm2(void);
 //读取Alarm1时间
 void DS3231_ReadAlarm1Time(DS3231_AlarmTypeDef *alarm);
-// 设置DS3231Alarm2（整点报时功能）
-void DS3231_SetAlarm2(uint8_t min);
 //闹钟检测函数
 uint8_t DS3231_CheckAlarms(void);
 

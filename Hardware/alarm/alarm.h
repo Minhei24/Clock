@@ -10,7 +10,7 @@
 #define ALARM_DURATION 10000 // 闹铃持续时长（10秒）
 
 
-// 【关键】每个闹钟独立状态，互不干扰
+// 闹钟状态结构体
 typedef struct
 {
     uint8_t trigger_flag;      // 1=已触发，0=未触发
@@ -19,7 +19,10 @@ typedef struct
 } Alarm_State;
 
 
-
+//闹钟运行函数
 void Alarm_Function(void);
+//闹钟关闭函数
 void Alarm_Close(void);
+
+
 #endif //__ALARM_H__
