@@ -36,6 +36,7 @@ targets:
         - Hardware/LED
         - Hardware/key
         - Hardware/alarm
+        - Hardware/temp
       libList: []
     excludeList: []
     toolchain: GCC

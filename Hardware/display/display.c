@@ -33,12 +33,12 @@ void Display_init(u8g2_t *u8g2)
 void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time,DS3231_AlarmTypeDef *alarm)//时间模块显示
 {   DS3231_GetTime(time); // 获取时间
     DS3231_ReadAlarm1Time(alarm); // 获取闹钟时间
-    u8g2_DrawXBMP(u8g2,0,0,28,32,num[time->hour/10]); 
-    u8g2_DrawXBMP(u8g2,28,0,28,32,num[time->hour%10]); // 显示小时
-    u8g2_DrawXBMP(u8g2,56,0,20,32,signal[0]); // 显示冒号
+    u8g2_DrawXBMP(u8g2,0,0,28,32,num[time->hour/10]); //绘制时间项
+    u8g2_DrawXBMP(u8g2,28,0,28,32,num[time->hour%10]); 
+    u8g2_DrawXBMP(u8g2,56,0,20,32,signal[0]); 
     u8g2_DrawXBMP(u8g2,76,0,28,32,num[time->min/10]); 
-    u8g2_DrawXBMP(u8g2,104,0,28,32,num[time->min%10]); // 显示小时
-    switch (menu_state)
+    u8g2_DrawXBMP(u8g2,104,0,28,32,num[time->min%10]); 
+    switch (menu_state)//绘制菜单项
     {
     case MENU_DATE:
         u8g2_SetDrawColor(u8g2,0);
@@ -52,11 +52,18 @@ void Display_ShowTime(u8g2_t *u8g2,DS3231_TimeTypeDef *time,DS3231_AlarmTypeDef 
         u8g2_SetDrawColor(u8g2,1);
         Display_Alarm(u8g2,alarm);
         break;
+    case MENU_TEMP:
+        u8g2_SetDrawColor(u8g2,0);
+        u8g2_DrawBox(u8g2,0,32,128,32);
+        u8g2_SetDrawColor(u8g2,1);
+        Display_Temp(u8g2);
+        break;
     case MENU_WEEK:
         u8g2_SetDrawColor(u8g2,0);
         u8g2_DrawBox(u8g2,0,32,128,32);
         u8g2_SetDrawColor(u8g2,1);
         Display_Week(u8g2,time);
+        break;
     default:
         break;
     }
@@ -100,7 +107,15 @@ void Display_Week(u8g2_t *u8g2,DS3231_TimeTypeDef *time)//绘制模块一(显示
     DS3231_GetTime(time);
     u8g2_DrawXBMP(u8g2,0,32,28,32,num[time->sec/10]);
     u8g2_DrawXBMP(u8g2,28,32,28,32,num[time->sec%10]);
-    u8g2_DrawXBMP(u8g2,64,32,20,32,signal[1]);
+    u8g2_DrawXBMP(u8g2,62,32,20,32,signal[1]);
     u8g2_DrawXBMP(u8g2,84,32,20,32,signal[2]);
     u8g2_DrawXBMP(u8g2,108,32,20,32,week[time->week-1]);
+}
+
+void Display_Temp(u8g2_t *u8g2)
+{   
+    u8g2_DrawXBMP(u8g2,0,32,32,32,icon[2]); // 显示温度图标
+    u8g2_DrawXBMP(u8g2,42,32,28,32,num[(uint8_t)Get_Temperature()/10]);
+    u8g2_DrawXBMP(u8g2,70,32,28,32,num[(uint8_t)Get_Temperature()%10]);
+    u8g2_DrawXBMP(u8g2,100,32,20,32,signal[5]);
 }

@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "i2c.h"
 #include "gpio.h"
 
@@ -97,25 +98,27 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C2_Init();
   MX_I2C1_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   Display_init(&u8g2);//初始化显示屏
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    //DS3231_SetTime(26, 1, 31, 7, 15, 50, 00); // 设置时间 （只需运行一次，设置完成后可注释掉）
-    //DS3231_SetAlarm1(16, 05, 00);             // 设置闹钟时间
-    //DS3231_SetAlarm2(0);                      // 设置整点报时
-    
+    DS3231_SetTime(26,2, 1, 7, 11, 59, 55); // 设置时间 （只需运行一次，设置完成后可注释掉）
+    DS3231_SetAlarm1(12, 00, 30);             // 设置闹钟时间
+    DS3231_SetAlarm2(0);                      // 设置整点报时
     while (1)
     {   Key_Scan(&Alarm1);
         Display_ShowTime(&u8g2, &Time, &Alarm1);
         Alarm_Function();
     /* USER CODE END WHILE */
-    }
+
     /* USER CODE BEGIN 3 */
+    }
   /* USER CODE END 3 */
 }
+
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -124,6 +127,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -150,6 +154,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }

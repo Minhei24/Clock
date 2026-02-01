@@ -17,7 +17,7 @@ void Key_Scan(DS3231_AlarmTypeDef *alarm)
             menu_state--;
             if (menu_state < 1)
             {
-                menu_state = 3;
+                menu_state = 4;
             }
             while (HAL_GPIO_ReadPin(KEY_Left_GPIO_Port, KEY_Left_Pin) == GPIO_PIN_RESET)
                 ;
@@ -25,7 +25,7 @@ void Key_Scan(DS3231_AlarmTypeDef *alarm)
         else if (HAL_GPIO_ReadPin(KEY_Right_GPIO_Port, KEY_Right_Pin) == GPIO_PIN_RESET)
         {
             menu_state++;
-            if (menu_state > 3)
+            if (menu_state > 4)
             {
                 menu_state = 1;
             }

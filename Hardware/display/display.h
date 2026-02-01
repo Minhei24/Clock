@@ -4,12 +4,12 @@
 #include "u8g2.h"
 #include "i2c.h"
 #include "ds3231.h"
-
+#include "temp.h"
 //菜单状态定义
 #define MENU_WEEK 1
 #define MENU_DATE 2
 #define MENU_ALARM 3
-
+#define MENU_TEMP 4
 //菜单状态变量
 extern uint8_t menu_state;
 //u8g2显示库
@@ -31,5 +31,6 @@ void Display_Week(u8g2_t *u8g2,DS3231_TimeTypeDef *time);
 void Display_Date(u8g2_t *u8g2,DS3231_TimeTypeDef *time);
 //绘制模块三(显示闹钟时间)
 void Display_Alarm(u8g2_t *u8g2,DS3231_AlarmTypeDef *alarm);
-
+//
+void Display_Temp(u8g2_t *u8g2);
 #endif // __DISPLAY_H__
